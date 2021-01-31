@@ -8,6 +8,11 @@ int main(int argc, char * argv[])
 	int N = 0;
 	int randomSeed = 0;
 
+	double * dsignal = nullptr;
+	float * fsignal = nullptr;
+
+
+	//cmd args
 	if (argc > 2)
 	{
 		for (int i = 1; i != argc - 1; ++i)
@@ -20,7 +25,35 @@ int main(int argc, char * argv[])
 		}
 	}
 
-	std::cout << N << "\n" << randomSeed;
+	//input check
+	if (N < wins[0])
+	{
+		std::cout << "Wrong input!\n";
+		return 0;
+	}
+
+	srand(randomSeed);
+
+	//memory 
+	//use 2N size. 0..N - input, N..2N - output
+	dsignal = new double[2 * N];
+	fsignal = new float[2 * N];
+
+	//generator
+	{
+		double edge = 100.0;
+
+		for (int i = 0; i != N; ++i)
+		{
+			int t = rand();
+
+			dsignal[i] = edge * t / RAND_MAX;
+			fsignal[i] = dsignal[i];
+		}
+	}
+
+	delete[] dsignal;
+	delete[] fsignal;
 
 	return 0;
 }
