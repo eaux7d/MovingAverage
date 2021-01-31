@@ -52,12 +52,10 @@ int main(int argc, char * argv[])
 
 		for (int i = 0; i != N; ++i)
 		{
-			int t = rand();
-
-			dsignal[i] = edge * t / RAND_MAX;
+			dsignal[i] = edge * rand() / (double)RAND_MAX;
 			fsignal[i] = (float) dsignal[i];
 
-			BaseSignal << fsignal[i] <<"\n";
+			BaseSignal << dsignal[i] <<"\n";
 		}
 	}
 
@@ -75,6 +73,7 @@ int main(int argc, char * argv[])
 
 			//for testing
 			std::ofstream outSignal(std::string("FSignal") + std::to_string(c) + std::string(".txt"));
+			outSignal << "WinLength fPerfomance dPerfomance";
 
 			unsigned startClock = clock();
 
@@ -87,7 +86,7 @@ int main(int argc, char * argv[])
 			unsigned endClock = clock();
 
 			if (midClock - startClock > 0 && endClock - midClock > 0)
-				outPerformance << c << " " << F / (midClock - startClock) << " " << F / (endClock - midClock) << "\n";
+				outPerformance << c << " " << F / (float)(midClock - startClock) << " " << F /(float) (endClock - midClock) << "\n";
 
 			for (int i = 0; i != N; ++i) outSignal << fsignal[i + N] << "\n";
 
