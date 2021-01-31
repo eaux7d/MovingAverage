@@ -64,16 +64,13 @@ int main(int argc, char * argv[])
 		short c = winsEdges[0];
 
 		std::ofstream outPerformance("PerformanceOutput.txt");
+		outPerformance << "WinLength fPerfomance dPerfomance";
 
-		unsigned F = CLOCKS_PER_SEC * N;
+		float F = CLOCKS_PER_SEC * N;
 
 		while (c != winsEdges[1] * 2)
 		{
 			if (c > N) break;
-
-			//for testing
-			std::ofstream outSignal(std::string("FSignal") + std::to_string(c) + std::string(".txt"));
-			outSignal << "WinLength fPerfomance dPerfomance";
 
 			unsigned startClock = clock();
 
@@ -86,8 +83,10 @@ int main(int argc, char * argv[])
 			unsigned endClock = clock();
 
 			if (midClock - startClock > 0 && endClock - midClock > 0)
-				outPerformance << c << " " << F / (float)(midClock - startClock) << " " << F /(float) (endClock - midClock) << "\n";
+				outPerformance << c << " " << F / (midClock - startClock) << " " << F / (endClock - midClock) << "\n";
 
+			//output of modified signal
+			std::ofstream outSignal(std::string("FSignal") + std::to_string(c) + std::string(".txt"));
 			for (int i = 0; i != N; ++i) outSignal << fsignal[i + N] << "\n";
 
 			c *= 2;
