@@ -8,7 +8,7 @@ void calculateAverage(T * signal, T * output, short const & winLen, int const & 
 	for (int i = 0; i != winLen; ++i)
 	{
 		sum += signal[i];
-		output[i] = sum / i;
+		output[i] = sum / (i + 1);
 	}
 
 

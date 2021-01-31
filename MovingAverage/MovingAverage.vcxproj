@@ -152,7 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MovingAverage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MovingAverage.h" />

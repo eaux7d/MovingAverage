@@ -10,7 +10,7 @@ int main(int argc, char * argv[])
 {
 	constexpr short winsEdges[2] = { 4,128 };
 
-	int N = 0;
+	int N = 1000000;
 	int randomSeed = 0;
 
 	double * dsignal = nullptr;
@@ -46,7 +46,7 @@ int main(int argc, char * argv[])
 
 	//generator
 	{
-		double edge = 100.0;
+		double edge = 1000.0;
 
 		std::ofstream BaseSignal("SourceSignal.txt");
 
@@ -67,6 +67,8 @@ int main(int argc, char * argv[])
 
 		std::ofstream outPerformance("PerformanceOutput.txt");
 
+		unsigned F = CLOCKS_PER_SEC * N;
+
 		while (c != winsEdges[1] * 2)
 		{
 			if (c > N) break;
@@ -74,8 +76,18 @@ int main(int argc, char * argv[])
 			//for testing
 			std::ofstream outSignal(std::string("FSignal") + std::to_string(c) + std::string(".txt"));
 
+			unsigned startClock = clock();
+
 			calculateAverage<float>(fsignal, fsignal + N, c, N);
+
+			unsigned midClock = clock();
+
 			calculateAverage<double>(dsignal, dsignal + N, c, N);
+
+			unsigned endClock = clock();
+
+			if (midClock - startClock > 0 && endClock - midClock > 0)
+				outPerformance << c << " " << F / (midClock - startClock) << " " << F / (endClock - midClock) << "\n";
 
 			for (int i = 0; i != N; ++i) outSignal << fsignal[i + N] << "\n";
 
