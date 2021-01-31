@@ -1,9 +1,14 @@
 #include <iostream>
+#include <cstdlib>
+#include <fstream>
+#include <ctime>
+#include <string>
 #include "MovingAverage.h"
+
 
 int main(int argc, char * argv[])
 {
-	constexpr short wins[6] = { 4,8,16,32,64,128 };
+	constexpr short winsEdges[2] = { 4,128 };
 
 	int N = 0;
 	int randomSeed = 0;
@@ -11,7 +16,7 @@ int main(int argc, char * argv[])
 	double * dsignal = nullptr;
 	float * fsignal = nullptr;
 
-
+	
 	//cmd args
 	if (argc > 2)
 	{
@@ -26,7 +31,7 @@ int main(int argc, char * argv[])
 	}
 
 	//input check
-	if (N < wins[0])
+	if (N < winsEdges[0])
 	{
 		std::cout << "Wrong input!\n";
 		return 0;
@@ -43,12 +48,38 @@ int main(int argc, char * argv[])
 	{
 		double edge = 100.0;
 
+		std::ofstream BaseSignal("SourceSignal.txt");
+
 		for (int i = 0; i != N; ++i)
 		{
 			int t = rand();
 
 			dsignal[i] = edge * t / RAND_MAX;
-			fsignal[i] = dsignal[i];
+			fsignal[i] = (float) dsignal[i];
+
+			BaseSignal << fsignal[i] <<"\n";
+		}
+	}
+
+	//main part
+	{
+		short c = winsEdges[0];
+
+		std::ofstream outPerformance("PerformanceOutput.txt");
+
+		while (c != winsEdges[1] * 2)
+		{
+			if (c > N) break;
+
+			//for testing
+			std::ofstream outSignal(std::string("FSignal") + std::to_string(c) + std::string(".txt"));
+
+			calculateAverage<float>(fsignal, fsignal + N, c, N);
+			calculateAverage<double>(dsignal, dsignal + N, c, N);
+
+			for (int i = 0; i != N; ++i) outSignal << fsignal[i + N] << "\n";
+
+			c *= 2;
 		}
 	}
 
