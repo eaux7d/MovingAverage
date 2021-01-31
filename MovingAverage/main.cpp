@@ -16,7 +16,7 @@ int main(int argc, char * argv[])
 	double * dsignal = nullptr;
 	float * fsignal = nullptr;
 
-	
+
 	//cmd args
 	if (argc > 2)
 	{
@@ -49,6 +49,7 @@ int main(int argc, char * argv[])
 		double edge = 1000.0;
 
 		std::ofstream BaseSignal("SourceSignal.txt");
+		BaseSignal.precision(12);
 
 		for (int i = 0; i != N; ++i)
 		{
@@ -64,9 +65,10 @@ int main(int argc, char * argv[])
 		short c = winsEdges[0];
 
 		std::ofstream outPerformance("PerformanceOutput.txt");
-		outPerformance << "WinLength fPerfomance dPerfomance";
+		outPerformance.precision(18);
+		outPerformance << "WinLength fPerfomance dPerfomance\n";
 
-		float F = CLOCKS_PER_SEC * N;
+		double F = CLOCKS_PER_SEC * N;
 
 		while (c != winsEdges[1] * 2)
 		{
@@ -87,7 +89,8 @@ int main(int argc, char * argv[])
 
 			//output of modified signal
 			std::ofstream outSignal(std::string("FSignal") + std::to_string(c) + std::string(".txt"));
-			for (int i = 0; i != N; ++i) outSignal << fsignal[i + N] << "\n";
+			outSignal.precision(12);
+			for (int i = 0; i != N; ++i) outSignal << dsignal[i + N] << "\n";
 
 			c *= 2;
 		}
